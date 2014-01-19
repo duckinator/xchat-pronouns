@@ -2,7 +2,7 @@
 
 * `/PRONOUNS <handle>`
     <p>Get the preferred pronouns for `<handle>`, if they have it specified in their IRC realname string.</p>
-* `/SETPRONOUNS <pronoun s>`
+* `/SETPRONOUNS <pronouns>`
     <p>Set your own preferred pronouns. `<pronouns>` can be whatever text you'd like. Requires reconnecting to take effect.</p>
     <p>If you don't pass any arguments it returns your currently-configured pronouns.</p>
 
