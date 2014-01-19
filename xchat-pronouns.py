@@ -9,9 +9,10 @@ pronouns_regexp = " \\[pronouns: (.*)\\]$"
 def real_name():
     return xchat.get_prefs("irc_real_name")
 
-def set_real_name(realname):
-    xchat.command("set irc_real_name " + realname)
+def set_real_name(new_real_name):
+    xchat.command("set irc_real_name " + new_real_name)
 
+# Given a string, return the preferred pronouns from it.
 def get_pronouns(string):
     m = re.search(pronouns_regexp, string, flags=re.IGNORECASE)
     if m is None:
@@ -20,23 +21,25 @@ def get_pronouns(string):
         return m.group(1)
 
 # Given a string, strip pronouns from it.
-def strip_pronouns(irc_real_name):
-    pronouns = get_pronouns(irc_real_name)
-  
-    # The 14 is to account for " [pronouns: ]".
+def strip_pronouns(string):
+    pronouns = get_pronouns(string)
+    
+    # Take everything before the pronouns, if any are in the string.
     if pronouns:
-        irc_real_name = irc_real_name[0:(len(irc_real_name) - len(pronouns) - 13)]
-    return irc_real_name
+        string = string[0:(len(string) - len(pronouns) - 13)]
+    return string
 
+# Return the pronouns set locally.
 def my_pronouns():
     return get_pronouns(real_name())
 
+# Set pronouns to the specified string.
 def set_pronouns(new_pronouns):
-    irc_real_name = strip_pronouns(real_name())
+    base_real_name = strip_pronouns(real_name())
     
     pronouns_text = " [pronouns: " + new_pronouns + "]"
     
-    new_real_name = irc_real_name + pronouns_text
+    new_real_name = base_real_name + pronouns_text
     
     if len(new_real_name) > 50:
         xchat.prnt("The total length for your \"real name\" setting must be at most 50 characters.")
@@ -110,7 +113,7 @@ def whois_callback(word, word_eol, userdata):
     if pronouns is not None:
         xchat.emit_print("WhoIs Identified", nickname, "Preferred pronouns: " + pronouns)
 
-    # Stop XChat from continuing with its default behaviors.
+    # Stop XChat from printing the default first WHOIS line.
     return xchat.EAT_XCHAT
 
 xchat.hook_server("311", whois_callback)
