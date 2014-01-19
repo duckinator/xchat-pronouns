@@ -5,6 +5,8 @@
 * `/SETPRONOUNS <pronouns>`
     <p>Set your own preferred pronouns. `<pronouns>` can be whatever text you'd like. Requires reconnecting to take effect.</p>
     <p>If you don't pass any arguments it returns your currently-configured pronouns.</p>
+* `/UNSETPRONOUNS` (alias: `/CLEARPRONOUNS`)
+    <p>Clear any preferred pronouns you have specified.</p>
 
 ## Setup ##
 
