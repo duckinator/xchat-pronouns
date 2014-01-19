@@ -23,7 +23,7 @@ def get_pronouns(string):
 def strip_pronouns(irc_real_name):
     pronouns = get_pronouns(irc_real_name)
   
-    # The 14 is to account for for " [pronouns: ]".
+    # The 14 is to account for " [pronouns: ]".
     if pronouns:
         irc_real_name = irc_real_name[0:(len(irc_real_name) - len(pronouns) - 13)]
     return irc_real_name
