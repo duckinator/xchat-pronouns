@@ -1,6 +1,6 @@
-# Preferred pronouns script #
+# Preferred pronouns script
 
-* `/PRONOUNS <handle>`
+* `/PRONOUNS <handle>` (not yet implemented)
     <p>Get the preferred pronouns for `<handle>`, if they have it specified in their IRC realname string.</p>
 * `/SETPRONOUNS <pronouns>`
     <p>Set your own preferred pronouns. `<pronouns>` can be whatever text you'd like. Requires reconnecting to take effect.</p>
@@ -8,17 +8,32 @@
 * `/UNSETPRONOUNS` (alias: `/CLEARPRONOUNS`)
     <p>Clear any preferred pronouns you have specified.</p>
 
-## Setup ##
+## WHOIS
 
-Assuming you pronouns are singular they, and your handle on IRC is `foobar`:
+`xchat-pronouns` also ties into WHOIS replies, and adds a line starting with "Preferred pronouns:" for anyone who specifies them.
 
-    /setpronouns they
+Example:
+
+```
+* [duckinator] (~duck@botters/staff/duckinator): Nik Markwell
+* [duckinator] Preferred pronouns: they/them/their
+* [duckinator] hitchcock.freenode.net :Sofia, BG, EU
+* duckinator :is using a secure connection
+* [duckinator] is logged in as duckyy
+* [duckinator] End of WHOIS list.
+```
+
+## Setup
+
+Assuming your pronouns are singular they, and your handle on IRC is `foobar`:
+
+    /setpronouns they/them/their
 
 Reconnect.
 
-    /pronouns foobar
+    /whois foobar
 
-It should return your preferred pronouns as you entered them.
+The WHOIS response for yourself should include your preferred pronouns as you entered them.
 
 ## Notes
 
