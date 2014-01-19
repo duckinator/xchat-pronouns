@@ -10,7 +10,7 @@
 
 Assuming you pronouns are singular they, and your handle on IRC is `foobar`:
 
-    /setpronouns them
+    /setpronouns they
 
 Reconnect.
 
