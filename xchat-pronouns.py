@@ -61,7 +61,7 @@ def cmd_pronouns(word, word_eol, userdata):
         xchat.prnt(pronouns_usage)
     return xchat.EAT_ALL
 
-setpronouns_usage = "Usage: SETPRONOUNS <pronouns>, Set your own preferred pronouns. <pronouns> can be whatever text you'd like. Requires reconnecting to take effect.\n                               If <pronouns> is not specified, returns your currently-configured pronouns."
+setpronouns_usage = "Usage: SETPRONOUNS <pronouns>, Set your own preferred pronouns. <pronouns> can be whatever text you'd like. Requires reconnecting to take effect.\nIf <pronouns> is not specified, returns your currently-configured pronouns."
 def cmd_setpronouns(word, word_eol, userdata):
     if len(word_eol) >= 2:
         if set_pronouns(word_eol[1]):
