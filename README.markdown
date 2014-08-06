@@ -15,8 +15,8 @@
 Example:
 
 ```
-* [duckinator] (~duck@botters/staff/duckinator): Nik Markwell
-* [duckinator] Preferred pronouns: they/them/their
+* [duckinator] (~duck@botters/staff/duckinator): Marie Markwell
+* [duckinator] Preferred pronouns: she or they
 * [duckinator] hitchcock.freenode.net :Sofia, BG, EU
 * duckinator :is using a secure connection
 * [duckinator] is logged in as duckyy
