@@ -6,6 +6,36 @@ __module_description__ = "Set information about your personal pronouns, and fetc
 
 pronouns_regexp = " \\[pronouns: (.*)\\]$"
 
+capture_whois = False
+def cb_whois_common(word, word_eol, userdata):
+    if capture_whois:
+        return xchat.EAT_ALL
+    else:
+        return xchat.EAT_NONE
+
+def cb_whois_name_line(word, word_eol, userdata):
+    pronouns = get_pronouns(word_eol[3])
+
+    if pronouns:
+        xchat.prnt(word[0] + "'s pronouns are " + pronouns)
+    else:
+        xchat.prnt(word[0] + " has not specified their pronouns.")
+
+    return xchat.EAT_ALL
+
+def cb_whois_end(word, word_eol, userdata):
+    global capture_whois
+
+    capture_whois = False
+
+    return xchat.EAT_ALL
+
+for event in ["Authenticated", "Away Line", "Channel/Oper Line", "Identified", "Idle Line", "Idle Line with Signon", "Real Host", "Server Line", "Special"]:
+    xchat.hook_print("WhoIs " +  event, cb_whois_common)
+
+xchat.hook_print("Whois Name Line", cb_whois_name_line)
+xchat.hook_print("Whois End", cb_whois_end)
+
 def real_name():
     return xchat.get_prefs("irc_real_name")
 
@@ -51,12 +81,17 @@ def set_pronouns(new_pronouns):
         return True
 
 def get_others_pronouns(handle):
-    return "Not implemented."
+    global capture_whois
+
+    capture_whois = True
+    xchat.command("WHOIS " + handle)
+
+    return xchat.EAT_ALL
 
 pronouns_usage = "Usage: PRONOUNS <handle>, get the pronouns for <handle>, if they have it specified in their IRC realname string."
 def cmd_pronouns(word, word_eol, userdata):
-    if len(word) > 0:
-        xchat.prnt("[Not implemented.]")
+    if len(word) > 1:
+        get_others_pronouns(word[1])
     else:
         xchat.prnt(pronouns_usage)
     return xchat.EAT_ALL
@@ -90,6 +125,11 @@ xchat.hook_command("CLEARPRONOUNS", cmd_unsetpronouns, help=unsetpronouns_usage)
 
 
 def whois_callback(word, word_eol, userdata):
+    global capture_whois
+
+    if capture_whois:
+        return xchat.EAT_NONE
+
     # Response format:
     # :server 311 yournick othersnick ~othersuser others/host * :Other's Realname
 
