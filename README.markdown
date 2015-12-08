@@ -1,4 +1,6 @@
-# Personal pronouns script
+# xchat-pronouns
+
+This plugin also works with HexChat.
 
 * `/PRONOUNS <handle>`
     <p>Get the pronouns for `<handle>`, if they have it specified in their IRC realname string.</p>
@@ -33,7 +35,7 @@ E.g., if you run `/whois duckinator` on FreeNode, you will get something along t
 
 ## /pronouns
 
-If you run `/pronouns duckinator`, you should get
+If you run `/pronouns duckinator`, you should get:
 
 ```
 Pronouns for duckinator: they/them/their.
