@@ -17,7 +17,7 @@ def cb_whois_name_line(word, word_eol, userdata):
     pronouns = get_pronouns(word_eol[3])
 
     if pronouns:
-        xchat.prnt(word[0] + "'s pronouns are " + pronouns)
+        xchat.prnt("Pronouns for " + word[0] + ": " + pronouns + ".")
     else:
         xchat.prnt(word[0] + " has not specified their pronouns.")
 
