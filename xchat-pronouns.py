@@ -1,4 +1,4 @@
-import xchat, dbus, os, inspect, re
+import xchat, re
 
 __module_name__ = "xchat-pronouns"
 __module_version__ = "0.1"
