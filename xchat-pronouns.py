@@ -6,7 +6,73 @@ __module_description__ = "Set information about your personal pronouns, and fetc
 
 pronouns_regexp = " \\[pronouns: (.*)\\]$"
 
+# Pronoun normalizer.
+
+# Imported from pronoun.is: https://github.com/witch-house/pronoun.is
+pronoun_table = [
+    ["ze", "hir", "hir", "hirs", "hirself"],
+    ["ze", "zir", "zir", "zirs", "zirself"],
+    ["she", "her", "her", "hers", "herself"],
+    ["he", "him", "his", "his", "himself"],
+    ["they", "them", "their", "theirs", "themself"],
+    ["it", "it", "its", "its", "itself"],
+    ["ey", "em", "eir", "eirs", "eirself"],
+    ["e", "em", "eir", "eirs", "emself"],
+    ["hu", "hum", "hus", "hus", "humself"],
+    ["peh", "pehm", "peh's", "peh's", "pehself"],
+    ["per", "per", "per", "pers", "perself"],
+    ["thon", "thon", "thons", "thons", "thonself"],
+    ["jee", "jem", "jeir", "jeirs", "jemself"],
+    ["ve", "ver", "vis", "vis", "verself"],
+    ["xe", "xem", "xyr", "xyrs", "xemself"],
+    ["zie", "zir", "zir", "zirs", "zirself"],
+    ["ze", "zem", "zes", "zes", "zirself"],
+    ["zie", "zem", "zes", "zes", "zirself"],
+    ["ze", "mer", "zer", "zers", "zemself"],
+    ["se", "sim", "ser", "sers", "serself"],
+    ["zme", "zmyr", "zmyr", "zmyrs", "zmyrself"],
+    ["ve", "vem", "vir", "virs", "vemself"],
+    ["zee", "zed", "zeta", "zetas", "zedself"]
+]
+
+def pronoun_lookup(pronouns):
+    if isinstance(pronouns, str):
+        pronouns = pronouns.split("/")
+
+    # If we have all five kinds of pronouns, just return them.
+    if len(pronouns) == 5:
+        return pronouns
+
+    # If we don't have all five kinds of pronouns, look them up in the table.
+    idx = len(pronouns)
+    for potential_pronouns in pronoun_table:
+        if pronouns == potential_pronouns[0:idx]:
+            return potential_pronouns
+
+    # If we couldn't determine the pronouns, return None.
+    return None
+
+def pronoun_usage_information(pronouns):
+    pronouns = pronoun_lookup(pronouns)
+
+    if not pronouns:
+        return None
+
+    (subject_pronoun, object_pronoun, posessive_determiner, posessive_pronoun, reflexive) = pronouns
+
+    # Sentences taken from pronoun.is.
+    return [
+        subject_pronoun.capitalize() + " went to the park.",
+        "I went with " + object_pronoun + ".",
+        subject_pronoun.capitalize() + " brought " + posessive_determiner + " frisbee.",
+        "At least I think it was " + posessive_pronoun + ".",
+        subject_pronoun.capitalize() + " threw the frisbee to " + reflexive + "."
+    ]
+
+# Plugin stuff.
+
 capture_whois = False
+show_usage = False
 def cb_whois_common(word, word_eol, userdata):
     if capture_whois:
         return xchat.EAT_ALL
@@ -20,6 +86,15 @@ def cb_whois_name_line(word, word_eol, userdata):
         xchat.prnt("Pronouns for " + word[0] + ": " + pronouns + ".")
     else:
         xchat.prnt(word[0] + " has not specified their pronouns.")
+
+    if pronouns and show_usage:
+        usage = pronoun_usage_information(pronouns)
+        if usage:
+            xchat.prnt("Example usage of " + pronoun_lookup(pronouns)[2] + " pronouns:")
+            for line in usage:
+                xchat.prnt("  " + line)
+        else:
+            xchat.prnt("No known usage information for pronouns " + word_eol[3] + ".")
 
     return xchat.EAT_ALL
 
@@ -90,8 +165,16 @@ def get_others_pronouns(handle):
 
 pronouns_usage = "Usage: PRONOUNS <handle>, get the pronouns for <handle>, if they have it specified in their IRC realname string."
 def cmd_pronouns(word, word_eol, userdata):
-    if len(word) > 1:
-        get_others_pronouns(word[1])
+    global show_usage
+
+    if len(word) == 2 or len(word) == 3:
+        handle = word[1]
+
+        if len(word) == 3 and word[1] == "-v":
+            handle = word[2]
+            show_usage = True
+
+        get_others_pronouns(handle)
     else:
         xchat.prnt(pronouns_usage)
     return xchat.EAT_ALL
